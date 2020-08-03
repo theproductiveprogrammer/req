@@ -23,7 +23,7 @@ req.send({
   data: ...,
   timeout: ...,
   headers: ...,
-})
+}, cb)
 ```
 
 If you don’t set a `Content-Type` header, `Req` will set:
