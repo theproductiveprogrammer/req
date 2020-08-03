@@ -1,5 +1,5 @@
 {
-  "name": "req",
+  "name": "@tpp/req",
   "version": "0.1.0",
   "description": "A wrapper around XMLHttpRequest for Ajax",
   "main": "index.js",
