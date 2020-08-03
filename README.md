@@ -31,7 +31,7 @@ If you don’t set a `Content-Type` header, `Req` will set:
 * `application/json` if the ‘data’ is a JSON object
 * `text/plain` for everything else (strings etc)
 
-The callback gets the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) and the response object.
+The callback gets the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) and the response object. You must check the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) to see if your request succeeded or failed.
 
 ---
 
