@@ -7,23 +7,32 @@ function send(opts, cb) {
 
   xhr.onreadystatechange = () => {
     if(xhr.readyState !== XMLHttpRequest.DONE) return
+
     if(timeout) clearTimeout(timeout)
-    if(already_handled_1()) return
-    let resp = xhr.responseText
-    if(!resp) resp = "{}"
+
+    let response
+    let responseType
+
     try {
-      resp = JSON.parse(resp)
-    } catch(e) {
-      resp = { reply: resp }
-    }
-    cb(xhr.status, resp)
+      response = JSON.parse(xhr.responseText)
+    } catch(e) {}
+    if(response) return callback_(xhr.status, response, "json")
+
+    try {
+      response = xhr.responseXML
+    } catch(e) {}
+    if(response) return callback_(xhr.status, response, "html")
+
+    try {
+      response = xhr.responseText
+    } catch(e) {}
+    if(!response) response = ""
+    return callback_(xhr.status, response, "string")
   }
 
   if(opts.timeout) {
     timeout = setTimeout(() => {
-      if(already_handled_1()) return
-      xhr.abort()
-      return cb(504, { err: "TIMEOUT" })
+      return callback_(504, "TIMEOUT", "string")
     }, opts.timeout)
   }
 
@@ -53,11 +62,15 @@ function send(opts, cb) {
   else xhr.send()
 
 
-  let completed = false
-  function already_handled_1() {
-    if(completed) return true
-    completed = true
-    return false
+  let done = false
+  function callback_(status, response, responseType) {
+    if(done) return
+    done = true
+    if(xhr.status >= 200 && xhr.status <= 300) {
+      cb(null, response, status, responseType)
+    } else {
+      cb(response, null, status, responseType)
+    }
   }
 }
 
