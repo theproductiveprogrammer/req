@@ -3,14 +3,12 @@
 function send(opts, cb) {
   let xhr = new XMLHttpRequest()
 
-  let completed = false
   let timeout
 
   xhr.onreadystatechange = () => {
     if(xhr.readyState !== XMLHttpRequest.DONE) return
     if(timeout) clearTimeout(timeout)
-    if(completed) return
-    completed = true
+    if(already_handled_1()) return
     let resp = xhr.responseText
     if(!resp) resp = "{}"
     try {
@@ -23,8 +21,7 @@ function send(opts, cb) {
 
   if(opts.timeout) {
     timeout = setTimeout(() => {
-      if(completed) return
-      completed = true
+      if(already_handled_1()) return
       xhr.abort()
       return cb(504, { err: "TIMEOUT" })
     }, opts.timeout)
@@ -55,6 +52,13 @@ function send(opts, cb) {
   if(data) xhr.send(data)
   else xhr.send()
 
+
+  let completed = false
+  function already_handled_1() {
+    if(completed) return true
+    completed = true
+    return false
+  }
 }
 
 function send_(method, url, data, cb) {
