@@ -10,29 +10,21 @@ function send(opts, cb) {
 
     if(timeout) clearTimeout(timeout)
 
-    let response
-    let responseType
+    let response = xhr.responseText
 
     try {
-      response = JSON.parse(xhr.responseText)
+      return callback_(xhr.status, JSON.parse(response))
     } catch(e) {}
-    if(response) return callback_(xhr.status, response, "json")
 
-    try {
-      response = xhr.responseXML
-    } catch(e) {}
-    if(response) return callback_(xhr.status, response, "html")
+    if(response) response = { response }
+    else response = null
 
-    try {
-      response = xhr.responseText
-    } catch(e) {}
-    if(!response) response = ""
-    return callback_(xhr.status, response, "string")
+    return callback_(xhr.status, response)
   }
 
   if(opts.timeout) {
     timeout = setTimeout(() => {
-      return callback_(504, "TIMEOUT", "string")
+      return callback_(504, { response: "TIMEOUT" })
     }, opts.timeout)
   }
 
@@ -63,14 +55,14 @@ function send(opts, cb) {
 
 
   let done = false
-  function callback_(status, response, responseType) {
+  function callback_(status, response) {
     if(done) return
     done = true
     if(xhr.status >= 200 && xhr.status <= 300) {
-      cb(null, response, status, responseType)
+      cb(null, response, status)
     } else {
-      if(!response) response = "ERROR"
-      cb(response, null, status, responseType)
+      if(!response) response = { response: `ERROR:${status}` }
+      cb(response, null, status)
     }
   }
 }
