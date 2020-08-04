@@ -59,12 +59,11 @@ The callback also has access to the [http status code](https://en.wikipedia.org/
 cb(err, resp, status)
 ```
 
-For the `resp`-onse itself (or `err` in case of errors), `Req` will try it’s best to parse as JSON and return it. If it is unable to do so it will return an object:
+For the `resp`-onse itself (or `err` in case of errors), `Req` will try it’s best to parse as JSON and return it. If it is unable to do so it will return an object with a single `response` field.
 
 ```javascript
 {
   response: <response string>
-  status: <response status>
 }
 ```
 
