@@ -59,19 +59,16 @@ The callback also has access to the [http status code](https://en.wikipedia.org/
 cb(err, resp, status)
 ```
 
-## Response Types
-
-`Req` tries it’s best to parse the response as JSON but responses can come in other formats based on what the server sends back. To help identify the response type the callback gets a last `responseType` parameter:
+For the `resp`-onse itself (or `err` in case of errors), `Req` will try it’s best to parse as JSON and return it. If it is unable to do so it will return an object:
 
 ```javascript
-cb(err, resp, status, responseType)
+{
+  response: <response string>
+  status: <response status>
+}
 ```
 
-where `responseType` is one of the following:
-
-* "json"
-* "string"
-* "html"
+Note that `resp` can also be `null` if no response data was sent back.
 
 ## FAQ
 
