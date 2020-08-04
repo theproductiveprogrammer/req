@@ -1,16 +1,28 @@
 # Req
 
-A thin wrapper around XMLHttpRequest.
+Make Ajax calls correctly with a thin wrapper around XMLHttpRequest.
 
-Good for small requests and responses - especially JSON - and so ideal for microservices.
+Ideal for small requests and responses - especially JSON. Perfect for microservices.
 
 ## Why?
 
-We make [ajax calls](https://en.wikipedia.org/wiki/Ajax_(programming)) often but the mechanism ([XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)) is not very intuitive to use.
+We make [ajax calls](https://en.wikipedia.org/wiki/Ajax_(programming)) often but the mechanism ([XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)) is not very intuitive to use. It is surprisingly hard to get it right across all browsers with proper error handling.
 
 `Req` wraps [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) so that it’s simpler to use.
 
+## Usage
+
+Install:
+
+```sh
+$ npm install @tpp/req
+```
+
+Use:
+
 ```javascript
+const req = require("@tpp/req")
+
 req.get(url, cb)
 req.get(url, data, cb)
 
@@ -26,12 +38,46 @@ req.send({
 }, cb)
 ```
 
+## Content-Type
+
 If you don’t set a `Content-Type` header, `Req` will set:
 
 * `application/json` if the ‘data’ is a JSON object
 * `text/plain` for everything else (strings etc)
 
-The callback gets the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) and the response object. You must check the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) to see if your request succeeded or failed.
+## Callback
+
+`Req` checks the response codes and error cases for you so the callback doesn’t have to. So the callback can be treated like a ‘normal’ async callback.
+
+```javascript
+cb(err, resp)
+```
+
+The callback also has access to the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) which is useful in many cases:
+
+```javascript
+cb(err, resp, status)
+```
+
+## Response Types
+
+`Req` tries it’s best to parse the response as JSON but responses can come in other formats based on what the server sends back. To help identify the response type the callback gets a last `responseType` parameter:
+
+```javascript
+cb(err, resp, status, responseType)
+```
+
+where `responseType` is one of the following:
+
+* "json"
+* "string"
+* "html"
+
+## FAQ
+
+### Why not use the [`fetch` api](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)?
+
+You can! It’s a great replacement for XMLHttpRequest. `Req` is only if you want a simple callback that works well with JSON request/responses.
 
 ---
 
