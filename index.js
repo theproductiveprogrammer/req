@@ -79,11 +79,7 @@ function send_(method, url, data, cb) {
     cb = data
     data = null
   }
-  send({
-    method,
-    url,
-    data,
-  }, cb)
+  send({ method, url, data }, cb)
 }
 
 function get(url, data, cb) {
