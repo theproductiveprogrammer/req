@@ -69,6 +69,7 @@ function send(opts, cb) {
     if(xhr.status >= 200 && xhr.status <= 300) {
       cb(null, response, status, responseType)
     } else {
+      if(!response) response = "ERROR"
       cb(response, null, status, responseType)
     }
   }
