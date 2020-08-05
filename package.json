@@ -1,6 +1,6 @@
 {
   "name": "@tpp/req",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A wrapper around XMLHttpRequest for Ajax",
   "main": "req.js",
   "scripts": {
