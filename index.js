@@ -10,13 +10,15 @@ function send(opts, cb) {
 
     if(timeout) clearTimeout(timeout)
 
-    let response = xhr.responseText
+    let response
 
     try {
-      return callback_(xhr.status, JSON.parse(response))
+      response = JSON.parse(xhr.responseText)
     } catch(e) {}
 
-    if(response) response = { response }
+    if(response) return callback_(response)
+
+    if(xhr.responseText) response = {response:xhr.responseText}
     else response = null
 
     return callback_(xhr.status, response)
