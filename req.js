@@ -16,7 +16,7 @@ function send(opts, cb) {
       response = JSON.parse(xhr.responseText)
     } catch(e) {}
 
-    if(response) return callback_(response)
+    if(response) return callback_(xhr.status, response)
 
     if(xhr.responseText) response = {response:xhr.responseText}
     else response = null
