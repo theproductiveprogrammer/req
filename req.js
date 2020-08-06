@@ -47,9 +47,7 @@ function send(opts, cb) {
   }
 
   if(headers) {
-    for(let k in opts.headers) {
-      xhr.setRequestHeader(k, opts.headers[k])
-    }
+    for(let k in headers) xhr.setRequestHeader(k, headers[k])
   }
 
   if(data) xhr.send(data)
