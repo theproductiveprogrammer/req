@@ -35,7 +35,7 @@ function send(opts, cb) {
   let headers = opts.headers
   let data = opts.data
 
-  if(data) {
+  if(data && !(data instanceof FormData)) {
     let contentType = 'text/plain'
     if(typeof data == 'object') {
       contentType = 'application/json'
