@@ -69,6 +69,24 @@ For the `resp`-onse itself (or `err` in case of errors), `Req` will try it’s b
 
 Note that `resp` can also be `null` if no response data was sent back.
 
+Finally you can get access to response headers if you ever need them:
+
+```javascript
+cb(err, resp, status, hdrval)
+```
+
+Use the `headers()` function to retrieve header values:
+
+```javascript
+function onResp(err, resp, status, hdrval) {
+  ...
+  let hdrs = req.headers(hdrval)
+  if(hdrs['content-type'] == "text/plain") {
+    ...
+  }
+}
+```
+
 ## FAQ
 
 ### Why not use the [`fetch` api](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)?

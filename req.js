@@ -21,7 +21,7 @@ function send(opts, cb) {
     if(xhr.responseText) response = {response:xhr.responseText}
     else response = null
 
-    return callback_(xhr.status, response)
+    return callback_(xhr.status, response, xhr.getAllResponseHeaders())
   }
 
   if(opts.timeout) {
@@ -55,16 +55,30 @@ function send(opts, cb) {
 
 
   let done = false
-  function callback_(status, response) {
+  function callback_(status, response, hdrval) {
     if(done) return
     done = true
     if(xhr.status >= 200 && xhr.status <= 300) {
-      cb(null, response, status)
+      cb(null, response, status, hdrval)
     } else {
       if(!response) response = { response: `ERROR:${status}` }
-      cb(response, null, status)
+      cb(response, null, status, hdrval)
     }
   }
+}
+
+function headers(hdrval) {
+  if(!hdrval) return hdrmap
+
+  let hdrmap = {}
+  let a = hdrval.trim().split(/[\r\n]+/)
+  for(let i = 0;i < a.length;i++) {
+    let s = a[i].split(': ')
+    let hdr = s.shift()
+    let val = s.join(': ')
+    hdrmap[hdr.toLowerCase()] = val
+  }
+  return hdrmap
 }
 
 function send_(method, url, data, cb) {
