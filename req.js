@@ -4,8 +4,13 @@ function send(opts, cb) {
   let xhr = new XMLHttpRequest()
 
   let timeout
+  let hdrval
 
   xhr.onreadystatechange = () => {
+    if(xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+      hdrval = xhr.getAllResponseHeaders()
+    }
+
     if(xhr.readyState !== XMLHttpRequest.DONE) return
 
     if(timeout) clearTimeout(timeout)
@@ -21,7 +26,7 @@ function send(opts, cb) {
     if(xhr.responseText) response = {response:xhr.responseText}
     else response = null
 
-    return callback_(xhr.status, response, xhr.getAllResponseHeaders())
+    return callback_(xhr.status, response)
   }
 
   if(opts.timeout) {
@@ -55,7 +60,7 @@ function send(opts, cb) {
 
 
   let done = false
-  function callback_(status, response, hdrval) {
+  function callback_(status, response) {
     if(done) return
     done = true
     if(xhr.status >= 200 && xhr.status <= 300) {
@@ -101,4 +106,5 @@ module.exports = {
   get,
   post,
   send,
+  headers,
 }
