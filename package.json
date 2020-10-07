@@ -2,7 +2,8 @@
   "name": "@tpp/req",
   "version": "2.2.1",
   "description": "A wrapper around XMLHttpRequest for Ajax",
-  "main": "req.js",
+  "main": "node-req.js",
+  "browser": "browser-req.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
