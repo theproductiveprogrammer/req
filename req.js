@@ -64,10 +64,17 @@ function send(opts, cb) {
     if(done) return
     done = true
     if(status >= 200 && status <= 300) {
-      cb(null, response, status, hdrval)
+      cb(null, {
+        status,
+        headers: () => { return headers(hdrval) },
+        body: response,
+      })
     } else {
       if(!response) response = { response: `ERROR:${status}` }
-      cb(response, null, status, hdrval)
+      cb(response, {
+        status,
+        headers: () => { return headers(hdrval) },
+      })
     }
   }
 }
@@ -106,5 +113,4 @@ module.exports = {
   get,
   post,
   send,
-  headers,
 }
