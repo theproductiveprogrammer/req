@@ -1,6 +1,6 @@
 # Req
 
-Make Ajax calls correctly with a thin wrapper around XMLHttpRequest.
+Make Ajax calls correctly with a thin wrapper around [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) and [Node’s HTTP](https://nodejs.org/api/http.html) module.
 
 Ideal for small requests and responses - especially JSON. Perfect for microservices.
 
@@ -8,7 +8,9 @@ Ideal for small requests and responses - especially JSON. Perfect for microservi
 
 We make [ajax calls](https://en.wikipedia.org/wiki/Ajax_(programming)) often but the mechanism ([XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)) is not very intuitive to use. It is surprisingly hard to get it right across all browsers with proper error handling.
 
-`Req` wraps [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) so that it’s simpler to use.
+Even if we work out [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest), the event management for the backend [Node’s HTTP](https://nodejs.org/api/http.html) module means we have to solve all the tricky bits there too.
+
+`Req` wraps [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) and [Node’s HTTP](https://nodejs.org/api/http.html) so that both use the same simple API in the most efficient manner possible.
 
 ## Usage
 
@@ -53,13 +55,17 @@ If you don’t set a `Content-Type` header, `Req` will set:
 cb(err, resp)
 ```
 
-The callback also has access to the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) which is useful in many cases:
+The response contains the the [http status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes), the body of the response with data, and the HTTP response headers.
 
-```javascript
-cb(err, resp, status)
+```js
+{
+  status: 200,
+  headers: headerMapFn(),
+  body: {data: 1234}
+}
 ```
 
-For the `resp`-onse itself (or `err` in case of errors), `Req` will try it’s best to parse as JSON and return it. If it is unable to do so it will return an object with a single `response` field.
+For the response `body` itself, `Req` will try it's best to parse it as JSON. If it is unable to do so it will return an object with a single `response` field.
 
 ```javascript
 {
@@ -69,19 +75,13 @@ For the `resp`-onse itself (or `err` in case of errors), `Req` will try it’s b
 
 Note that `resp` can also be `null` if no response data was sent back.
 
-Finally you can get access to response headers if you ever need them:
+Use the `headers()` method to parse and retrieve the header map:
 
 ```javascript
-cb(err, resp, status, hdrval)
-```
-
-Use the `headers()` function to retrieve header values:
-
-```javascript
-function onResp(err, resp, status, hdrval) {
+function onResp(err, resp) {
   ...
-  let hdrs = req.headers(hdrval)
-  if(hdrs['content-type'] == "text/plain") {
+  let headers = resp.headers()
+  if(headers['content-type'] == "text/plain") {
     ...
   }
 }
@@ -91,7 +91,9 @@ function onResp(err, resp, status, hdrval) {
 
 ### Why not use the [`fetch` api](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)?
 
-You can! It’s a great replacement for XMLHttpRequest. `Req` is only if you want a simple callback that works well with JSON request/responses.
+You can! It’s a great replacement for XMLHttpRequest on the browser. `Req` is if you want a tight, clean and simple callback that works well with JSON request/responses.
+
+Plus it works both on the browser and in the backend which makes code sharing easier.
 
 ---
 
