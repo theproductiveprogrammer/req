@@ -63,7 +63,7 @@ function send(opts, cb) {
   function callback_(status, response) {
     if(done) return
     done = true
-    if(xhr.status >= 200 && xhr.status <= 300) {
+    if(status >= 200 && status <= 300) {
       cb(null, response, status, hdrval)
     } else {
       if(!response) response = { response: `ERROR:${status}` }
