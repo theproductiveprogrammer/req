@@ -60,20 +60,20 @@ function send(opts, cb) {
     if(status >= 200 && status <= 300) {
       cb(null, {
         status,
-        headers: () => { return headers(hdrval) },
+        headers: () => { return parseHeaders(hdrval) },
         body: response,
       })
     } else {
       if(!response) response = { response: `ERROR:${status}` }
       cb(response, {
         status,
-        headers: () => { return headers(hdrval) },
+        headers: () => { return parseHeaders(hdrval) },
       })
     }
   }
 }
 
-function headers(hdrval) {
+function parseHeaders(hdrval) {
   if(!hdrval) return hdrmap
 
   let hdrmap = {}
