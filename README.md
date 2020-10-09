@@ -96,5 +96,11 @@ You can! It’s a great replacement for XMLHttpRequest on the browser. `Req` is 
 
 Plus it works both on the browser and in the backend which makes code sharing easier.
 
+### What happens when the Server responds with a HTML error?
+
+Sometimes servers are configured to send back full HTML pages as error responses (remember the “fail-whale”?). Many servers do this because they expect the requester to be a browser and so sending back HTML makes sense.
+
+However, in a Microservice environment, we have found it is better to be able to see/log text rather than HTML. For this reason, when there are error HTML documents sent back, the browser version of `Req` will parse them and extract out the message as a text.
+
 ---
 
