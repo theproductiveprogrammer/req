@@ -26,31 +26,35 @@ function send(opts, cb) {
   let req = http.request(opts.url, options, res => {
     let body = []
     res.on("data", chunk => body.push(chunk))
+
     res.on("end", () => {
       if(!body.length) return callback_(res.statusCode, null, res.headers)
       let rdata = Buffer.concat(body)
       try {
-        return callback_(res.statusCode, JSON.parse(rdata), res.headers)
+        callback_(res.statusCode, JSON.parse(rdata), res.headers)
       } catch(e) {
-        return callback_(res.statusCode, {response: rdata.toString()}, res.headers)
+        callback_(res.statusCode, rdata.toString(), res.headers)
       }
     })
+
     if(options.timeout) {
       req.setTimeout(options.timeout, () => {
-        callback_(504, { response: "TIMEOUT" })
+        callback_(504, "TIMEDOUT")
         req.abort()
       })
     }
+
     res.on("error", err => callback_(-1, err))
-    res.on("close", () => callback_(-2, { response: "connection closed" }))
+    res.on("close", () => callback_(-2, "CONNECTIONCLOSED"))
   })
+
   req.on("error", err => callback_(-1, err))
 
   if(data) req.write(data)
   req.end()
 
   let done = false
-  function callback_1(status, response, hdrs) {
+  function callback_(status, response, hdrs) {
     if(done) return
     done = true
     if(status >= 200 && status <= 300) {
@@ -60,7 +64,7 @@ function send(opts, cb) {
         body: response
       })
     } else {
-      if(!response) response = { response: `ERROR:${status}` }
+      if(!response) response = `STATUSCODE:${status}`
       cb(response, {
         status,
         headers: () => hdrs,
