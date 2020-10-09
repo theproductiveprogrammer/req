@@ -1,4 +1,5 @@
 'use strict'
+const util = require('./util.js')
 
 function send(opts, cb) {
   let xhr = new XMLHttpRequest()
@@ -65,6 +66,7 @@ function send(opts, cb) {
       })
     } else {
       if(!response) response = `STATUSCODE:${status}`
+      else response = util.unhtml(response)
       cb(response, {
         status,
         headers: () => { return parseHeaders(hdrval) },
@@ -103,6 +105,8 @@ function get(url, data, cb) {
 function post(url, data, cb) {
   send_('POST', url, data, cb)
 }
+
+
 
 module.exports = {
   get,
