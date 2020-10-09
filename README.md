@@ -45,6 +45,7 @@ req.send({
 If you don’t set a `Content-Type` header, `Req` will set:
 
 * `application/json` if the ‘data’ is a JSON object
+* `application/x-www-form-urlencoded` or `multipart/form-data` for [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
 * `text/plain` for everything else (strings etc)
 
 ## Callback
