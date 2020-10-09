@@ -15,18 +15,12 @@ function send(opts, cb) {
 
     if(timeout) clearTimeout(timeout)
 
-    let response
-
     try {
-      response = JSON.parse(xhr.responseText)
-    } catch(e) {}
-
-    if(response) return callback_(xhr.status, response)
-
-    if(xhr.responseText) response = {response:xhr.responseText}
-    else response = null
-
-    return callback_(xhr.status, response)
+      callback_(xhr.status, JSON.parse(xhr.responseText))
+    } catch(e) {
+      if(!xhr.responseText) callback_(xhr.status, null)
+      else callback_(xhr.status, xhr.responseText)
+    }
   }
 
   if(opts.timeout) {
