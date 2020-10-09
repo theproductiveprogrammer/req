@@ -25,7 +25,7 @@ function send(opts, cb) {
 
   if(opts.timeout) {
     timeout = setTimeout(() => {
-      return callback_(504, { response: "TIMEOUT" })
+      return callback_(504, "TIMEDOUT")
     }, opts.timeout)
   }
 
@@ -64,7 +64,7 @@ function send(opts, cb) {
         body: response,
       })
     } else {
-      if(!response) response = { response: `ERROR:${status}` }
+      if(!response) response = `STATUSCODE:${status}`
       cb(response, {
         status,
         headers: () => { return parseHeaders(hdrval) },
