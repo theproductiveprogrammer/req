@@ -74,9 +74,10 @@ function send(opts, cb) {
 }
 
 function parseHeaders(hdrval) {
+  let hdrmap = {}
+
   if(!hdrval) return hdrmap
 
-  let hdrmap = {}
   let a = hdrval.trim().split(/[\r\n]+/)
   for(let i = 0;i < a.length;i++) {
     let s = a[i].split(': ')
