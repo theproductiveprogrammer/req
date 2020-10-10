@@ -65,6 +65,7 @@ function send(opts, cb) {
       })
     } else {
       if(!response) response = `STATUSCODE:${status}`
+      else response = util.unhtml(response)
       cb(response, {
         status,
         headers: () => hdrs,

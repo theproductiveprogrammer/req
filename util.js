@@ -1,4 +1,5 @@
 'use strict'
+const striptags = require('striptags')
 
 /*    understand/
  * sometimes the response is a HTML document so we try to remove all the
@@ -6,10 +7,8 @@
  */
 function unhtml(txt) {
   if(typeof txt !== "string") return txt
-  let e = document.createElement("div")
-  txt = txt.replace(/<head>[\s\S]*<\/head>/, "")
-  e.innerHTML = txt
-  txt = e.innerText
+  txt = striptags(txt)
+  txt = txt.replace(/[\r\n]+/gm, '\n')
   return txt.trim()
 }
 
