@@ -96,6 +96,17 @@ You can! It’s a great replacement for XMLHttpRequest on the browser. `Req` is 
 
 Plus it works both on the browser and in the backend which makes code sharing easier.
 
+### Why not use `request`, `axis`, `superagent` etc?
+
+They are great libraries with support for a lot of stuff which we mostly don’t need. `Req` is tiny, focused and fast. For comparison:
+
+| Library    | Size      |
+| ---------- | --------- |
+| request    | 684.2kB   |
+| axios      | 13.4kB    |
+| superagent | 32.8kB    |
+| **`Req`**  | **2.9kB** |
+
 ### What happens when the Server responds with a HTML error?
 
 Sometimes servers are configured to send back full HTML pages as error responses (remember the “fail-whale”?). Many servers do this because they expect the requester to be a browser and so sending back HTML makes sense.
