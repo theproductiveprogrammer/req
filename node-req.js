@@ -1,6 +1,8 @@
 'use strict'
 const http = require('http')
 
+const util = require('./util.js')
+
 /*    way/
  * send the request to the server, handling all the events correctly so
  * that the callback is only invoked once.
