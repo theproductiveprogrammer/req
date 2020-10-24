@@ -60,18 +60,26 @@ function send(opts, cb) {
     if(done) return
     done = true
     if(status >= 200 && status <= 300) {
-      cb(null, {
-        status,
-        headers: () => hdrs,
-        body: response
-      })
+      try {
+        cb(null, {
+          status,
+          headers: () => hdrs,
+          body: response
+        })
+      } catch(e) {
+        console.error(e)
+      }
     } else {
       if(!response) response = `STATUSCODE:${status}`
       else response = util.unhtml(response)
-      cb(response, {
-        status,
-        headers: () => hdrs,
-      })
+      try {
+        cb(response, {
+          status,
+          headers: () => hdrs,
+        })
+      } catch(e) {
+        console.error(e)
+      }
     }
   }
 }
