@@ -1,6 +1,6 @@
 {
   "name": "@tpp/req",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "description": "A wrapper around XMLHttpRequest for Ajax",
   "main": "node-req.js",
   "browser": "browser-req.js",
