@@ -1,5 +1,6 @@
 'use strict'
 const http = require('http')
+const https = require('https')
 
 const util = require('./util.js')
 
@@ -25,7 +26,10 @@ function send(opts, cb) {
     timeout: opts.timeout,
     headers: headers,
   }
-  let req = http.request(opts.url, options, res => {
+  let h_ = http
+  if(opts.url && opts.url.startsWith("https")) h_ = https
+  if(options.protocol === "https") h_ = https
+  let req = h_.request(opts.url, options, res => {
     let body = []
     res.on("data", chunk => body.push(chunk))
 
